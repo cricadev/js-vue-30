@@ -1,0 +1,31 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.keys {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  transition: all 0.07s ease;
+  user-select: none;
+  cursor: pointer;
+  flex-basis: 1.5%;
+  height: 100px;
+  border: 1px solid black;
+  box-sizing: border-box;
+}
+
+.playing {
+  border-color: #ffc600;
+  transform: scale(1.1);
+  box-shadow: 0 0 17px 0 #ffc600;
+}

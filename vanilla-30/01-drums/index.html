@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SApo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="keys">
+      <div class="key" data-key="65">
+        <kbd>A</kbd>
+      </div>
+      <div class="key" data-key="83">
+        <kbd>S</kbd>
+      </div>
+      <div class="key" data-key="68">
+        <kbd>D</kbd>
+      </div>
+      <div class="key" data-key="70">
+        <kbd>F</kbd>
+      </div>
+      <div class="key" data-key="71">
+        <kbd>G</kbd>
+      </div>
+      <div class="key" data-key="72">
+        <kbd>H</kbd>
+      </div>
+      <div class="key" data-key="74">
+        <kbd>J</kbd>
+      </div>
+      <div class="key" data-key="75">
+        <kbd>K</kbd>
+      </div>
+      <div class="key" data-key="76">
+        <kbd>L</kbd>
+      </div>
+      <div class="key" data-key="186">
+        <kbd>;</kbd>
+      </div>
+      <div class="key" data-key="222">
+        <kbd>'</kbd>
+      </div>
+      <div class="key" data-key="13">
+        <kbd>Enter</kbd>
+      </div>
+      <div class="key" data-key="90">
+        <kbd>Z</kbd>
+      </div>
+      <div class="key" data-key="88">
+        <kbd>X</kbd>
+      </div>
+      <div class="key" data-key="67">
+        <kbd>C</kbd>
+      </div>
+      <div class="key" data-key="86">
+        <kbd>V</kbd>
+      </div>
+      <div class="key" data-key="66">
+        <kbd>B</kbd>
+      </div>
+      <div class="key" data-key="78">
+        <kbd>N</kbd>
+      </div>
+      <div class="key" data-key="77">
+        <kbd>M</kbd>
+      </div>
+      <div class="key" data-key="188">
+        <kbd>,</kbd>
+      </div>
+      <div class="key" data-key="81">
+        <kbd>Q</kbd>
+      </div>
+      <div class="key" data-key="87">
+        <kbd>W</kbd>
+      </div>
+      <div class="key" data-key="69">
+        <kbd>E</kbd>
+      </div>
+      <div class="key" data-key="82">
+        <kbd>R</kbd>
+      </div>
+    </div>
+
+    <audio src="sounds/key01.mp3" data-key="65"></audio>
+    <audio src="sounds/key02.mp3" data-key="83"></audio>
+    <audio src="sounds/key03.mp3" data-key="68"></audio>
+    <audio src="sounds/key04.mp3" data-key="70"></audio>
+    <audio src="sounds/key05.mp3" data-key="71"></audio>
+    <audio src="sounds/key06.mp3" data-key="72"></audio>
+    <audio src="sounds/key07.mp3" data-key="74"></audio>
+    <audio src="sounds/key08.mp3" data-key="75"></audio>
+    <audio src="sounds/key09.mp3" data-key="76"></audio>
+    <audio src="sounds/key10.mp3" data-key="186"></audio>
+    <audio src="sounds/key11.mp3" data-key="222"></audio>
+    <audio src="sounds/key12.mp3" data-key="13"></audio>
+    <audio src="sounds/key13.mp3" data-key="90"></audio>
+    <audio src="sounds/key14.mp3" data-key="88"></audio>
+    <audio src="sounds/key15.mp3" data-key="67"></audio>
+    <audio src="sounds/key16.mp3" data-key="86"></audio>
+    <audio src="sounds/key17.mp3" data-key="66"></audio>
+    <audio src="sounds/key18.mp3" data-key="78"></audio>
+    <audio src="sounds/key19.mp3" data-key="77"></audio>
+    <audio src="sounds/key20.mp3" data-key="188"></audio>
+    <audio src="sounds/key21.mp3" data-key="81"></audio>
+    <audio src="sounds/key22.mp3" data-key="87"></audio>
+    <audio src="sounds/key23.mp3" data-key="69"></audio>
+    <audio src="sounds/key24.mp3" data-key="82"></audio>
+  </body>
+  <script>
+    function playSound(e) {
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      if (!audio) return; // stop the function from running all together
+      audio.currentTime = 0; // rewind to the start
+      audio.play();
+      key.classList.add("playing");
+    }
+    window.addEventListener("keydown", playSound);
+    function removeTransition(e) {
+      if (e.propertyName !== "transform") return;
+      this.classList.remove("playing");
+    }
+    const keys = document.querySelectorAll(".key");
+
+    keys.forEach((key) =>
+      key.addEventListener("transitionend", removeTransition)
+    );
+  </script>
+</html>

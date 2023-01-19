@@ -10,6 +10,7 @@
       class="select-clock"
       id="clock-select"
       v-model="clock"
+      @change="pausePomodoros"
     >
       <option value="pomodoro">Pomodoro</option>
       <option value="short">Short Break</option>
@@ -28,6 +29,7 @@
         <div class="hourText"></div>
       </div>
     </div>
+
     <div class="clock" v-if="clock === 'pomodoro'">
       <p class="hour-text">
         {{ minutes }} :
@@ -46,13 +48,37 @@
       </div>
     </div>
     <div class="clock" v-if="clock === 'short'">
-      <div class="clock-face">
-        <div class="hourText">5:00</div>
+      <p class="hour-text">
+        {{ minutesShort }} :
+        {{ secondsShort < 10 ? `0${secondsShort}` : secondsShort }}
+      </p>
+      <div class="flex items-center gap-2">
+        <button @click="audioPlayShort" class="btn" v-if="!isRunningShort">
+          <Icon name="material-symbols:play-arrow" class="icon-btn" />
+        </button>
+        <button @click="audioPauseShort" class="btn" v-else>
+          <Icon name="material-symbols:pause-outline" class="icon-btn"></Icon>
+        </button>
+        <button @click="audioStopShort" class="btn">
+          <Icon name="material-symbols:stop" class="icon-btn"></Icon>
+        </button>
       </div>
     </div>
     <div class="clock" v-if="clock === 'long'">
-      <div class="clock-face">
-        <div class="hourText">15:00</div>
+      <p class="hour-text">
+        {{ minutesLong }} :
+        {{ secondsLong < 10 ? `0${secondsLong}` : secondsLong }}
+      </p>
+      <div class="flex items-center gap-2">
+        <button @click="audioPlayLong" class="btn" v-if="!isRunningLong">
+          <Icon name="material-symbols:play-arrow" class="icon-btn" />
+        </button>
+        <button @click="audioPauseLong" class="btn" v-else>
+          <Icon name="material-symbols:pause-outline" class="icon-btn"></Icon>
+        </button>
+        <button @click="audioStopLong" class="btn">
+          <Icon name="material-symbols:stop" class="icon-btn"></Icon>
+        </button>
       </div>
     </div>
   </div>
@@ -62,11 +88,28 @@
 import play from "../assets/sounds/play.mp3";
 import pause from "../assets/sounds/pause.mp3";
 import stopp from "../assets/sounds/stop.mp3";
+import { useTimer } from "../composables/useClock";
 const clock = ref("pomodoro");
 const colorMode = useColorMode();
 const { minutes, seconds, isRunning, startTimer, stopTimer, pauseTimer } =
   useTimer(25, 0);
 
+const {
+  minutes: minutesShort,
+  seconds: secondsShort,
+  isRunning: isRunningShort,
+  startTimer: startTimerShort,
+  stopTimer: stopTimerShort,
+  pauseTimer: pauseTimerShort,
+} = useTimer(5, 0);
+const {
+  minutes: minutesLong,
+  seconds: secondsLong,
+  isRunning: isRunningLong,
+  startTimer: startTimerLong,
+  stopTimer: stopTimerLong,
+  pauseTimer: pauseTimerLong,
+} = useTimer(15, 0);
 const audioPlay = () => {
   const audio = new Audio(play);
   if (!isRunning.value) {
@@ -87,6 +130,66 @@ const audioStop = () => {
     audio.play();
   }
   stopTimer();
+};
+
+const audioPlayShort = () => {
+  const audio = new Audio(play);
+  if (!isRunningShort.value) {
+    audio.play();
+  }
+  startTimerShort();
+};
+
+const audioPauseShort = () => {
+  const audio = new Audio(pause);
+  if (isRunningShort.value) {
+    audio.play();
+  }
+  pauseTimerShort();
+};
+
+const audioStopShort = () => {
+  const audio = new Audio(stopp);
+  if (isRunningShort.value) {
+    audio.play();
+  }
+  stopTimerShort();
+};
+
+const audioPlayLong = () => {
+  const audio = new Audio(play);
+  if (!isRunningLong.value) {
+    audio.play();
+  }
+  startTimerLong();
+};
+
+const audioPauseLong = () => {
+  const audio = new Audio(pause);
+  if (isRunningLong.value) {
+    audio.play();
+  }
+  pauseTimerLong();
+};
+
+const audioStopLong = () => {
+  const audio = new Audio(stopp);
+  if (isRunningLong.value) {
+    audio.play();
+  }
+  stopTimerLong();
+};
+
+const pausePomodoros = () => {
+  if (isRunning.value) {
+    pauseTimer();
+  }
+  if (isRunningShort.value) {
+    pauseTimerShort();
+  }
+  if (isRunningLong.value) {
+    pauseTimerLong();
+  }
 };
 </script>
 

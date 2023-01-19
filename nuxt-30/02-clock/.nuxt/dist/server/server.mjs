@@ -1,0 +1,1 @@
+export { default } from "file:///Users/cricadev/Desktop/learning/js30/nuxt-30/02-clock/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"

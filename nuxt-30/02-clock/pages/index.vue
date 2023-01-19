@@ -25,9 +25,7 @@
       <div class="hand second-hand"></div>
     </div>
     <div class="clock" v-if="clock === 'digital'">
-      <div class="clock-face">
-        <div class="hourText"></div>
-      </div>
+      <h1 class="hourText hour-text"></h1>
     </div>
 
     <div class="clock" v-if="clock === 'pomodoro'">
@@ -89,6 +87,7 @@ import play from "../assets/sounds/play.mp3";
 import pause from "../assets/sounds/pause.mp3";
 import stopp from "../assets/sounds/stop.mp3";
 import { useTimer } from "../composables/useClock";
+import { onMounted, onUpdated } from "vue";
 const clock = ref("pomodoro");
 const colorMode = useColorMode();
 const { minutes, seconds, isRunning, startTimer, stopTimer, pauseTimer } =
@@ -191,6 +190,53 @@ const pausePomodoros = () => {
     pauseTimerLong();
   }
 };
+onUpdated(() => {
+  const secondHand = document.querySelector(".second-hand");
+  const minHand = document.querySelector(".min-hand");
+  const hourHand = document.querySelector(".hour-hand");
+  const hourText = document.querySelector(".hourText");
+  if (clock.value === "analog") {
+    function setDate() {
+      const now = new Date();
+
+      const seconds = now.getSeconds();
+      const secondsDegrees = (seconds / 60) * 360 + 90;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      const hours = now.getHours();
+      const hoursDegrees = (hours / 12) * 360;
+      hourHand.style.transform = `rotate(${hoursDegrees}deg) scale(0.8)`;
+      const mins = now.getMinutes();
+      const minsDegrees = (mins / 60) * 360 + 90;
+      minHand.style.transform = `rotate(${minsDegrees}deg)`;
+      if (hours >= 12) {
+        hourText.textContent = `${
+          now.getHours() - 12
+        }:${now.getMinutes()}:${now.getSeconds()} PM`;
+      } else {
+        hourText.textContent = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} AM`;
+      }
+    }
+
+    setInterval(setDate, 1000);
+  } else if (clock.value === "digital") {
+    function setDate() {
+      const now = new Date();
+
+      const seconds = now.getSeconds();
+      const hours = now.getHours();
+      const mins = now.getMinutes();
+      if (hours > 12) {
+        hourText.textContent = `${now.getHours() - 12}:${now.getMinutes()}:${
+          now.getSeconds() < 10 ? "0" + now.getSeconds() : now.getSeconds()
+        } PM`;
+      } else {
+        hourText.textContent = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} AM`;
+      }
+    }
+
+    setInterval(setDate, 1000);
+  }
+});
 </script>
 
 <style scoped lang="scss">
